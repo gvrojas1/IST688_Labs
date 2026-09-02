@@ -1,5 +1,6 @@
 import streamlit as st
 from openai import OpenAI
+import fitz  # PyMuPDF
 
 # Show title and description.
 st.title("📄 My document question answering")
@@ -8,7 +9,7 @@ st.write(
     "To use this app, you need to provide an OpenAI API key, which you can get [here](https://platform.openai.com/account/api-keys). "
 )
 
-# Ask user for their OpenAI API key via `st.text_input`.
+# Ask user for their OpenAI API key via `st.secrets`.
 openai_api_key = st.secrets.get("OPENAI_API_KEY", "")
 client = OpenAI(api_key=openai_api_key)
 
@@ -39,15 +40,21 @@ if key_is_valid:
     # Map the checkbox to actual model names
     model = "gpt-4.1" if use_advanced_model else "gpt-4.1-mini"
 
-    # Let the user upload a file via `st.file_uploader`.
     uploaded_file = st.file_uploader(
-        "Upload a document (.txt or .md)", type=("txt", "md")
+        "Upload a document (.txt, .md, or .pdf)", type=("txt", "md", "pdf")
     )
 
     if uploaded_file:
 
-        # Process the uploaded file.
-        document = uploaded_file.read().decode()
+        # Process the uploaded file based on its type.
+        if uploaded_file.type == "application/pdf":
+            pdf_doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
+            document = ""
+            for page in pdf_doc:
+                document += page.get_text()
+            pdf_doc.close()
+        else:
+            document = uploaded_file.read().decode()
 
         # Build the instruction based on the sidebar selection.
         instruction_map = {
@@ -71,4 +78,5 @@ if key_is_valid:
             stream=True,
         )
 
+        # Stream the response to the app using `st.write_stream`.
         st.write_stream(stream)
