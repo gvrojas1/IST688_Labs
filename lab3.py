@@ -7,7 +7,6 @@ st.title("Streamlit Chatbot")
 SYSTEM_PROMPT = {
     "role": "system",
     "content": (
-        "You are a friendly assistant."
         "You are a friendly assistant. "
         "When the user asks a question, answer it clearly and simply. "
         "Then ALWAYS ask: 'Do you want more info?' "
@@ -28,8 +27,8 @@ if "messages" not in st.session_state:
 
 #Show chat history on screen but hide system message
 for message in st.session_state.messages:
-    if message["role"] == "system"
-    continue
+    if message["role"] == "system":
+        continue
     with st.chat_message(message["role"]):
         st.write(message["content"])
 
