@@ -1,9 +1,6 @@
 import streamlit as st
 from openai import OpenAI
 
-import streamlit as st
-from openai import OpenAI
-
 st.title("Streamlit Chatbot")
 st.write("This is a simple chatbot interface using Streamlit and OpenAI's API. Type your message below and the assistant will respond.")
 
