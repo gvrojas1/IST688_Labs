@@ -152,7 +152,7 @@ if st.button("Get advice"):
 
 # Part D answers (confirm against "Behind the scenes" after running)
 # a. How many messages are there, and what is each one?
-#    Expected for one city: 4 messages
+#    4 messages
 #      1. human -- "What should I wear in <location>?"
 #      2. ai    -- the model's request to call get_weather_data (empty content)
 #      3. tool  -- the weather data returned by get_weather_data
@@ -163,8 +163,13 @@ if st.button("Get advice"):
 #    message.tool_calls (tool name, arguments like {"location": ...}, and an id).
 #
 # c. In Lab 5, which lines of your code created each of those messages?
-#    TODO: fill in with line numbers from your Lab5.py
-#      1. human: line(s) ___
-#      2. ai tool request: line(s) ___
-#      3. tool result: line(s) ___
-#      4. final ai: line(s) ___
+#      1. human: lines 164-173 -- the if/else builds user_request, then the
+#         messages list adds it as the "user" message (line 172).
+#      2. ai tool request: lines 177-182 -- the first
+#         client.chat.completions.create call. Lines 184-188 then pull out
+#         the tool call and parse its arguments with json.loads.
+#      3. tool result: line 195 runs get_current_weather(location). Lab 5
+#         never sends this back as a "tool" message: line 206 pastes the
+#         weather JSON into a new "user" message through ADVICE_PROMPT.
+#      4. final ai: lines 202-208 -- the second
+#         client.chat.completions.create call (displayed on line 210).
