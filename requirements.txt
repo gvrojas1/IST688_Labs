@@ -7,3 +7,7 @@ protobuf==3.20
 requests
 langchain
 langchain-openai
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+sentence-transformers
+numpy
